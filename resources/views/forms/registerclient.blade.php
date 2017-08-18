@@ -39,9 +39,7 @@
         </div>
 
         <div class="col-sm-6 pad-t20">
-
             <h4 class="blue-title b-title pad-b10">Contact Information</h4>
-
             <div class="form-group">
                 <label for="">First Name <span class="error-text">*</span></label>
                 {!! Form::text('first_name', null, ['class'=>'form-control','placeholder'=>'Enter your first name','required']) !!}
