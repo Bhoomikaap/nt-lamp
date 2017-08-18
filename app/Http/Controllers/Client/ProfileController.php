@@ -75,6 +75,7 @@ class ProfileController extends Controller
                 ->with('countries', $selectcountries)
                 ->with('selectindustry', $selectindustry)
                 ->with('selectfunctionalarea', $selectfunctionalarea);
+
         } else {
             $view = view('client.profile')->with('selectcompanies', $selectcompanies)
                 ->with('annual_lakh_options', $annual_lakh_options)
@@ -82,6 +83,7 @@ class ProfileController extends Controller
                 ->with('countries', $selectcountries)
                 ->with('selectindustry', $selectindustry)
                 ->with('selectfunctionalarea', $selectfunctionalarea);
+
         }
 
         return $view;
@@ -215,6 +217,7 @@ class ProfileController extends Controller
         } else {
             $returnArray['sse_type'] = null;
         }
+
 
         if (isset($userdetail->hsse_institution)) {
             $returnArray['hsse_institution']= $userdetail->hsse_institution;
@@ -519,8 +522,10 @@ class ProfileController extends Controller
 
     public function saveProfile(Request $request)
     {
+
+
         $this->validate(
-            $request, 
+            $request,
             [
                 'email' => 'required|email|unique:users,email,'.Auth::user()->id,
                 'contact_no' => 'required',//ERROR : JQUERY PASSES WHEN MAX VAL IS 10 BUT THIS VALIDATION DOESNT
@@ -569,6 +574,7 @@ class ProfileController extends Controller
             $user->push();
 
             return redirect()->route('Profile', ['#page=profileform']);
+
         } catch (\Exception $e) {
             //echo $e->getMessage(); exit;
             return back()->withErrors([$e]);
@@ -691,9 +697,23 @@ class ProfileController extends Controller
                             </div>';
                         }
 
-                        if ($exp->annual_thousand != 0
-                            or $exp->annual_lakh != 0
+                        if ($exp->annual_thousand == 0
+                            and $exp->annual_lakh != 0
                         ) {
+                            $html .= '<div class="col-sm-12">
+                            <div class="form-group">
+                            <label for="renumeration"></label>
+                            <p>'.$exp->annual_lakh.' Lakh(s) ';
+                            if ($exp->currency) {
+                                $html .= ' in '.$exp->currency;
+                            }
+                            $html .= '</p></div>
+                            </div>';
+                        }
+                        else if ($exp->annual_thousand != 0
+                            and $exp->annual_lakh != 0
+                        )
+                        {
                             $html .= '<div class="col-sm-12">
                             <div class="form-group">
                             <label for="renumeration"></label>
@@ -703,17 +723,23 @@ class ProfileController extends Controller
                             }
                             $html .= '</p></div>
                             </div>';
+
                         }
+
+
 
                         if ($exp->industry) {
                             $html .= '<div class="col-sm-6">
                             <div class="form-group">
                             <label for="industry">Industry</label>
-                            <p>'.$exp->industry.'</p>
+                            <p>'.$exp->industries->industry.'</p>
                             </div>
                             </div>';
                         }
+
+
                         if ($exp->functional_area) {
+
                             $html .= '<div class="col-sm-6">
                             <div class="form-group">
                             <label for="functional_area">Functional Area</label>
@@ -813,6 +839,7 @@ class ProfileController extends Controller
                 return 1;
             }
         } else {
+
             return -1;
         }
     }
@@ -840,6 +867,7 @@ class ProfileController extends Controller
     public function loadEducationDetails(Request $request, FormBuilder $formbuilder)
     {
         if ($request->ajax()) {
+			$userdetail = self::_escapeUserDetail(Auth::user()->userdetail);
             $form = $formbuilder->build('SaveEducationDetails');
             return $form;
         } else {
@@ -847,9 +875,8 @@ class ProfileController extends Controller
         }
     }
 
-    public function saveEducationDetails(Request $request)
-    {
-        $userdetails = UserDetail::where('user_id', Auth::user()->id)->first();
+   public function saveEducationDetails(Request $request){
+        $userdetails = UserDetail::where('user_id',Auth::user()->id)->first();
 
         $userdetails->sse_institution = $request->get('10_educational_institute_name');
         $userdetails->sse_start_date = $request->get('10_education_start_date');
@@ -858,32 +885,32 @@ class ProfileController extends Controller
         // $userdetails->sse_marks = $request->get('10_marks');
 
         $userdetails->hsse_institution = $request->get('12_educational_institute_name');
-        $userdetails->hsse_start_date = ( $request->get('12_education_start_date') != '' ? $request->get('12_education_start_date') : NULL);
-        $userdetails->hsse_end_date = ( $request->get('12_education_end_date') != '' ? $request->get('12_education_end_date') : NULL);
+        $userdetails->hsse_start_date = $request->get('12_education_start_date');
+        $userdetails->hsse_end_date = $request->get('12_education_end_date');
         $userdetails->hsse_type = $request->get('12_course');
         // $userdetails->hsse_marks = $request->get('12_marks');
 
         $userdetails->ug_institution = $request->get('ug_educational_institute_name');
-        $userdetails->ug_start_date = ( $request->get('ug_education_start_date') != '' ? $request->get('ug_education_start_date') : NULL);
-        $userdetails->ug_end_date = ( $request->get('ug_education_end_date') != '' ? $request->get('ug_education_end_date') : NULL);
+        $userdetails->ug_start_date = $request->get('ug_education_start_date');
+        $userdetails->ug_end_date = $request->get('ug_education_end_date');
         $userdetails->ug_type = $request->get('ug_course');
         // $userdetails->ug_marks = $request->get('ug_marks');
 
         $userdetails->pg_institution = $request->get('pg_educational_institute_name');
-        $userdetails->pg_start_date = ( $request->get('pg_education_start_date') != '' ? $request->get('pg_education_start_date') : NULL);
-        $userdetails->pg_end_date = ( $request->get('pg_education_end_date') != '' ? $request->get('pg_education_end_date') : NULL); 
+        $userdetails->pg_start_date = $request->get('pg_education_start_date');
+        $userdetails->pg_end_date = $request->get('pg_education_end_date');
         $userdetails->pg_type = $request->get('pg_course');
         // $userdetails->pg_marks = $request->get('pg_marks');
 
         $userdetails->other_institution = $request->get('other_educational_institute_name');
-        $userdetails->other_start_date = ( $request->get('other_education_start_date') != '' ? $request->get('other_education_start_date') : NULL);
-        $userdetails->other_end_date = ( $request->get('other_education_end_date') != '' ? $request->get('other_education_end_date') : NULL);
+        $userdetails->other_start_date = $request->get('other_education_start_date');
+        $userdetails->other_end_date = $request->get('other_education_end_date');
         $userdetails->other_type = $request->get('other_course');
         // $userdetails->other_marks = $request->get('other_marks');
 
         $userdetails->save();
 
-        return redirect()->route('Profile', ['#page=educationdetails']);
+        return redirect()->route('Profile',['#page=educationdetails']);
     }
 
     public function loadChangePassword(Request $request, FormBuilder $formbuilder)
@@ -1033,3 +1060,4 @@ class ProfileController extends Controller
         }
     }
 }
+

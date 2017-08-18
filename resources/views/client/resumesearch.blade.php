@@ -11,15 +11,17 @@
                 <div class="clearfix mar-t20">
                     <div class="row">
                         <div class="col-sm-6">
-                           <h4 class="sm-title mar-t10 mar-b15">
-                                {{ $candidateCount }} <strong>@if($candidateCount > 1) Resumes @else Resume @endif</strong> found
-                            </h4>
+
                             @if(isset($search_keywords) and !empty($search_keywords))
                             <p class="mar-b0">
                                 <?php $keywords = '<strong>' . implode('</strong>, <strong>', $search_keywords) . '</strong>'; ?>
                                 Searched for Keywords:
                                 {!! $keywords !!}
                             </p>
+                                <h4 class="sm-title mar-t10 mar-b15">
+
+                                    {{ $candidateCount }} <strong>@if($candidateCount > 1) Resumes @else Resume @endif</strong> found
+                                </h4>
                             @endif
                         </div>
                         <div class="col-sm-6">

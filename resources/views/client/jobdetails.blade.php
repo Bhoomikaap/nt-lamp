@@ -39,8 +39,10 @@
             <p>
                 <div class="panel panel-info">
                   <!-- Default panel contents -->
-                  <div class="panel-heading text-center"><a href="javascript:void(0)" data-toggle="collapse" data-target="#details-table">View all details <i class="fa fa-eye"></i></a></div>
-                  <div class="panel-body collapse" id="details-table">
+
+                   <div class="panel-heading text-center" id="less"><a href="javascript:void(0)" data-toggle="collapse" data-target="#details-table">View all details </a></div>
+
+                    <div class="panel-body collapse" id="details-table">
                         <!-- Table -->
                         <table class="table" id="details-table" class="collapse">
                             <tbody>
@@ -192,16 +194,11 @@
                                 </tr>
                                 @endif
 
-                                @if($data['job']->created_at)
-                                <tr>
-                                    <td><b>Created</b></td>
-                                    <td>{{$data['job']->created_at->diffForHumans()}}</td>
-                                </tr>
-                                @endif
+
 
                                 @if($data['job']->updated_at)
                                 <tr>
-                                    <td><b>Last Updated</b></td>
+                                    <td><b>Job Posted </b></td>
                                     <td>{{$data['job']->updated_at->diffForHumans()}}</td>
                                 </tr>
                                 @endif
@@ -254,7 +251,7 @@
             
             <div class="col-sm-4 mar-b30">
                 <!-- @include('client.partials.subscribetonewsletter') -->
-                @include('client.partials.homeads')
+               <!-- @include('client.partials.homeads') -->
             </div>
         </div>
     </div>
@@ -264,6 +261,19 @@
 @section('js')
 @parent
 <script type="text/javascript">
+
+
+        $('#less').click(function() {
+            jQuery(this).text('Hide details');
+            if($('#details-table').is(':visible')){
+                jQuery(this).text('View all details');
+            }else{
+                jQuery(this).text('Hide details');
+            }
+            $('#details-table').slideToggle('fast');
+            return false;
+        });
+
 	function engageOverhang() {
 	    $('.overhang').fadeIn(100).show();
 
@@ -271,5 +281,6 @@
 		$('.overhang').fadeOut(500).hide();
 	    });	
 	}
+
 </script>
 @stop

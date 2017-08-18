@@ -1,9 +1,16 @@
 @extends('templates.client.master')
-
-
 @section('content')
-<div class="container pad-t85 mar-t20">
+    <div class="container pad-t85 mar-t20">
+    <p>Profile Completeness</p>
+
+    <div class="progress">
+        <div id ="increase" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40"
+             aria-valuemin="0" aria-valuemax="100" style="width:10%">
+            40% Complete (success)
+        </div>
+    </div>
     <div class="row mar-b20">
+
         <div class="col-sm-3">
             <ul class="lhs-nav nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#edit-basic-information" id="edit-basic-information-button" aria-controls="edit-basic-information" role="tab" data-toggle="tab" class="profile-sum-icon">Edit My Profile</a></li>
@@ -17,7 +24,10 @@
             <div class="clearfix pad-t20">
             @if(isset(Auth::user()->userdetail->resume_media_id) && Auth::user()->userdetail->resume_media_id != 0)
                 <div class="green-box clearfix"><span class="upload-icon"></span> <span href="#" class="pad-b5 pull-left sm-title">{{Auth::user()->userdetail->media->content}}</span>
-                    <p class="mar-b0"><a href="#" class="white-title mar-r20">Edit</a><a href="{{URL::route('DeleteResume',[Auth::user()->userdetail->resume_media_id])}}" class="white-title profile-delete-alert">Delete</a></p>
+                    <h4>Resume</h4>
+
+                    <p class="pull-right"> <a href="{{URL::route('DeleteResume',[Auth::user()->userdetail->resume_media_id])}}" class="white-title profile-delete-alert">Delete</a></p>
+
                 </div>
             @else
                 <div class="green-box clearfix"><span class="upload-icon"></span> <span href="#" class="pad-b5 pull-left sm-title">No Resume Uploaded</span>
@@ -26,6 +36,7 @@
                         <input type="file" class="form-control" name="profile_resume">
                         <br>
                         <button type="submit" class="btn btn-sm btn-success">Upload Resume</button>
+
                     </div>
                     {!!Form::token()!!}
                     {!!Form::close()!!}
@@ -107,60 +118,165 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">Add Employment Details</h4>
       </div>
       <div class="modal-body" id="myModalBody">
             {!!Form::open(["route"=>"AddExperience",'id'=>'add-experience-form'])!!}
 
             <div class="form-group">
-            <label for="">Employer <span class="error-text">*</span></label>
-            {!!Form::select('company',$selectcompanies,null,['placeholder'=>'Select employer','class'=>'form-control','id'=>'register_company','required'])!!}
+            <label for="">Current Employer <span class="error-text">*</span></label>
+                {!!Form::text('company',null,['placeholder'=>' Current Employer Name','class'=>'form-control','id'=>'register_company','required'])!!}
             </div>
 
-            <div class="form-group">
-            <label for="">Start Date <span class="error-text">*</span></label>
-            {!!Form::date('experience_start_date',null,['class'=>'form-control fresher','placeholder'=>'Start Date','id'=>'experience_start_date','required'])!!}
-            </div>
+          <div class="form-group">
+              <label for="">Duration <span class="error-text">*</span></label>
+          </div>
+          <div class="row hmar5">
 
-            <div class="form-group">
-            <label for="">End Date <span class="error-text">*</span></label>
-            {!!Form::date('experience_end_date',null,['class'=>'form-control fresher','placeholder'=>'End Date','id'=>'experience_end_date','required'])!!}
-            </div>
+              <div class="col-xs-6 hpad5">
+
+                  <input
+                          type="date"
+                          name="experience_start_date"
+                          class="form-control fresher"
+                          placeholder="MM/DD/YYYY"
+                          id="experience_start_date"
+                          max="<?=date('Y-m-d')?>"
+                  />
+
+              </div>
+
+              <div class="col-xs-6 hpad5">
+                  <input
+                          type="date"
+                          name="experience_end_date"
+                          class="form-control fresher"
+                          placeholder="mm/dd/yyyy"
+                          id="experience_end_date"
+                          max="<?=date('Y-m-d')?>"
+                  />
+              </div>
+          </div>
+          <br>
+          <div class="form-group">
+              <label for="">Designation<span class="error-text">*</span></label>
+              {!!Form::text('Designation',null,['placeholder'=>'Your full designation','class'=>'form-control','id'=>'employee_designation','required'])!!}
+          </div>
+
+          <div class="content-holder" id="pervious_emp"  >
+
+              <a href="#" class="expand-content-link">+Add Prevoius Employer</a>
+              <div class="hidden-content" style="display:none;">
+                  <div class="col-sm-12">
+                      <hr class="c-hr">
+                  </div>
+                 <div class="form-group" >
+              <label for="">Previous Employer <span class="error-text">*</span></label>
+              {!!Form::text('company',null,['placeholder'=>'Prevoius Employer Name','class'=>'form-control','id'=>'register_company','required'])!!}
+          </div>
+
+          <div class="form-group">
+              <label for="">Duration <span class="error-text">*</span></label>
+          </div>
+          <div class="row hmar5">
+
+              <div class="col-xs-6 hpad5">
+
+                  <input
+                          type="date"
+                          name="experience_start_date"
+                          class="form-control fresher"
+                          placeholder="MM/DD/YYYY"
+                          id="experience_start_date"
+                          max="<?=date('Y-m-d')?>"
+                  />
+
+              </div>
+
+              <div class="col-xs-6 hpad5">
+                  <input
+                          type="date"
+                          name="experience_end_date"
+                          class="form-control fresher"
+                          placeholder="mm/dd/yyyy"
+                          id="experience_end_date"
+                          max="<?=date('Y-m-d')?>"
+                  />
+              </div>
+          </div>
+          <br>
+          <div class="form-group">
+              <label for="">Designation<span class="error-text">*</span></label>
+              {!!Form::text('Designation',null,['placeholder'=>'Your full designation','class'=>'form-control','id'=>'employee_designation','required'])!!}
+          </div>
+                  <div class="col-sm-12">
+                      <hr class="c-hr">
+                  </div>
+
+              </div>
+          </div>
+
+          <div class="form-group">
+          <label for="">Annual Salary <span class="error-text">*</span></label>
+          </div>
+          <div class="row hmar5">
+              <div class="form-group col-sm-5 hpad5">
+                  <div class="input-group">
+                      {!!Form::select('annual_lakh',$annual_lakh_options,null,['placeholder'=>'Lakh(s)','class'=>'form-control fresher'])!!}
+                      <div class="input-group-addon c-add-on">Lakhs</div></div>
+              </div>
+              <div class="form-group col-sm-5 hpad5">
+                  <div class="input-group">
+                      {!!Form::select('annual_thousand',$annual_thousand_options,null,['placeholder'=>'Thousand(s)','class'=>'form-control fresher'])!!}
+                      <div class="input-group-addon c-add-on">Thousands</div></div>
+              </div>
+          </div>
+
+          <div class="clearfix">
+              <label class="radio-inline">
+                  <input type="radio" name="currency" id="inlineRadio1" value="AED" class="fresher"> UAE Currency
+              </label>
+              <label class="radio-inline">
+                  <input type="radio" name="currency" id="inlineRadio2" value="USD" class="fresher"> US Currency
+              </label>
+              <label class="radio-inline">
+                  <input type="radio" name="currency" id="inlineRadio3" value="RUP" class="fresher"checked="checked"> Indian Currency
+              </label>
+          </div>
+          <br>
+
+
+          <div class="form-group">
+              <label for="">Key Skills<span class="error-text">*</span></label>
+              {!!Form::text('key_skills',null,['placeholder'=>'key skills','class'=>'form-control','id'=>'key_skills','required'])!!}
+          </div>
             <div class="form-group">    
-                <label for="">Description </label>
+                <label for="">Job Profile</label>
                 <textarea class="form-control fresher" id="employement_description" name="employement_description" placeholder="Provide a description of your employment" rows="2"></textarea>
             </div>
-
-             <div class="row hmar5">
-                <div class="form-group col-sm-5 hpad5">  
-                   <div class="input-group">
-                    {!!Form::select('annual_lakh',$annual_lakh_options,null,['placeholder'=>'Lakh(s)','class'=>'form-control fresher'])!!}
-                    <div class="input-group-addon c-add-on">Lakhs</div></div>
-                </div>
-
-                <div class="form-group col-sm-5 hpad5">  
-                    <div class="input-group">
-                    {!!Form::select('annual_thousand',$annual_thousand_options,null,['placeholder'=>'Thousand(s)','class'=>'form-control fresher'])!!}
-                    <div class="input-group-addon c-add-on">Thousands</div></div>
-                </div>
-            </div>
-
-             <div class="clearfix">
-                <label class="radio-inline">
-                    <input type="radio" name="currency" id="inlineRadio1" value="AED" class="fresher"> UAE Currency
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="currency" id="inlineRadio2" value="USD" class="fresher"> US Currency
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="currency" id="inlineRadio3" value="RUP" class="fresher"> Indian Currency
-                </label>
-            </div>
-            <br>
             <div class="clearfix">
+
+
                 <div class="form-group">
-                    <label for="">Industry </label>
+                    <label for="">Total Experience <span class="error-text">*</span></label>
+                </div>
+                <div class="row hmar5">
+                    <div class="form-group col-sm-5 hpad5">
+                        <div class="input-group">
+                            {!!Form::select('total_years',['Fresher',1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,'30+'],null,['placeholder'=>'Year(s)','class'=>'form-control fresher'])!!}
+                            <div class="input-group-addon c-add-on">Years</div></div>
+                    </div>
+                    <div class="form-group col-sm-5 hpad5">
+                        <div class="input-group">
+                            {!!Form::select('total_months',[0,1,2,3,4,5,6,7,8,9,10,11],null,['placeholder'=>'Month(s)','class'=>'form-control fresher'])!!}
+                            <div class="input-group-addon c-add-on">Months</div></div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for=""> Current Industry </label>
                     {!!Form::select('industry',$selectindustry,null,['placeholder'=>'Select related industry','class'=>'form-control fresher','id'=>'industry'])!!}
                 </div>
 
@@ -253,6 +369,7 @@
 @section('js')
     @parent
     {!! Html::script('assets/js/jquery.validate.min.js') !!}
+    {!! Html::script('assets/js/jquery.multi-step-form.js') !!}
     <script type="text/javascript">
      //GLOBAL REQUIREMENTS
         animationend = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -295,7 +412,61 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        function foo()
+        {
+            document.getElementById('profile_image').src = "assets/img/userpic_large.png";
+        }
+
+
+     var n = 6;
+
+
+
+
+     function move()
+     {
+         var elem = document.getElementById("increase");
+         var width = 80;
+         var id = setInterval(frame, 10);
+         function frame() {
+             if (width >= 100) {
+                 clearInterval(id);
+             } else {
+
+                 elem.style.width = width + '%';
+
+             }
+         }
+     }
+
+
+
     $(document).ready(function (){
+
+
+        jQuery(document).ready(function() {
+            jQuery(".expand-content-link").click(function() {
+                jQuery(this).next(".hidden-content").show();
+                return false;
+            });
+        });
+
+
+
+
+
+
+            $('#remove').click(function() {
+                $('#profile_image').remove();
+
+             });
+
+
+
+
+
+
         if(window.location.hash != ''){
             if(window.location.hash === '#page=profileform'){
                 $('#edit-basic-information-button').trigger('click');
@@ -336,6 +507,10 @@
         }, "Password must contain at least one upper case, at least one lower case, and at least one special character");
 
 
+        jQuery.validator.addMethod("emailordomain", function(value, element) {
+            return this.optional(element) || /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+                .test(value);
+        }, "Please specify the correct email");
 
 
 
@@ -363,7 +538,11 @@
                        load_image_field:{
                         filesize : 1048576,
                         extension: "jpg|jpeg|png|gif"
-                       }
+                       },
+
+                        email: {
+                            emailordomain: true,
+                        },
 
                     },
                     messages:{
@@ -394,6 +573,19 @@
                         label.insertBefore(element);
                     },
                 });
+
+
+                var start = document.getElementById('experience_start_date');
+                var end = document.getElementById('experience_end_date');
+
+                start.addEventListener('change', function() {
+                    if (start.value)
+                        end.min = start.value;
+                }, false);
+                end.addEventLiseter('change', function() {
+                    if (end.value)
+                        start.max =end .value;
+                }, false);
 
                 $('#load_image').click(function (event){
                     $('#load_image_field').trigger('click');
@@ -467,55 +659,56 @@
           }
       });
 
-    $('#add-experience-form').submit(function (e){
-        var isValid = $(this).valid();
-        if(isValid){
-            e.preventDefault();
-            $.post($(this).attr('action'),$(this).serialize(),function (data){
-                console.log(data);
-                if(data === "-2"){
-                    new PNotify({
-                        title: 'Error',
-                        text: 'Error submitting form',
-                        type : 'error',
-                    });
-                    $(':input','#add-experience-form')
-                      .not(':button, :submit, :reset, :hidden')
-                      .val('')
-                      .removeAttr('checked')
-                      .removeAttr('selected');
-                    $('#my-popup').modal('hide');
-                }else if(data === "-3"){
-                    new PNotify({
-                        title: 'Error',
-                        text: 'Experience has been added for the same time period already.',
-                        type : 'error',
-                    });
-                    $(':input','#add-experience-form')
-                      .not(':button, :submit, :reset, :hidden')
-                      .val('')
-                      .removeAttr('checked')
-                      .removeAttr('selected');
-                }else{
-                    $(':input','#add-experience-form')
-                      .not(':button, :submit, :reset, :hidden')
-                      .val('')
-                      .removeAttr('checked')
-                      .removeAttr('selected');
-                    $('#my-popup').modal('hide');
-                    $('#edit-employment-details-button').trigger('click'); 
-                }
-            }).fail(function (){
-               ajaxerror();
-                $(':input','#add-experience-form')
-                  .not(':button, :submit, :reset, :hidden')
-                  .val('')
-                  .removeAttr('checked')
-                  .removeAttr('selected');
-                $('#my-popup').modal('hide');
-            });       
+     $('#add-experience-form').submit(function (e){
+         var isValid = $(this).valid();
+         if(isValid){
+             e.preventDefault();
+             $.post($(this).attr('action'),$(this).serialize(),function (data){
+                 console.log(data);
+                 if(data === "-2"){
+                     new PNotify({
+                         title: 'Error',
+                         text: 'Error submitting form',
+                         type : 'error',
+                     });
+
+                     $(':input','#add-experience-form')
+                         .not(':button, :submit, :reset, :hidden')
+                         .val('')
+                         .removeAttr('checked')
+                         .removeAttr('selected');
+
+                 }else if(data === "-3"){
+                     new PNotify({
+                         title: 'Error',
+                         text: 'Experience has been added for the same time period already.',
+                         type : 'error',
+                     });
+                     $(':input','#add-experience-form')
+                         .not(':button, :submit, :reset, :hidden')
+                         .val('')
+                         .removeAttr('checked')
+                         .removeAttr('selected');
+                 }else{
+                     $(':input','#add-experience-form')
+                         .not(':button, :submit, :reset, :hidden')
+                         .val('')
+                         .removeAttr('checked')
+                         .removeAttr('selected');
+                     $('#my-popup').modal('hide');
+                     $('#edit-employment-details-button').trigger('click');
+                 }
+             }).fail(function (){
+                 ajaxerror();
+                 $(':input','#add-experience-form')
+                     .not(':button, :submit, :reset, :hidden')
+                     .val('')
+                     .removeAttr('checked')
+                     .removeAttr('selected');
+                 $('#my-popup').modal('hide');
+             });
          }
-    });
+     });
 
     $('#new_company_form').submit(function (e){
         var isValid = $(this).valid();
@@ -631,22 +824,22 @@
     });
 
     //CLICK Employment Details
-    $('#edit-employment-details-button').click(function (e){
-        window.location.hash = "page=employmentdetails";
-        $.post('profile/async/loademploymentdetails',{_token:token},function (data){
-            if(data === -1){
-                ajaxerrorclicktoclose();
-            }else{
-                var animationName = 'animated fadeInUp';
-                $('#edit-employment-details').addClass(animationName).html(data).one(animationend,function() {
-                  $(this).removeClass(animationName);
-                });
-            }
-            
-        }).fail(function (){
-            ajaxerrorclicktoclose();
-        });
-    });
+     $('#edit-employment-details-button').click(function (e){
+         window.location.hash = "page=employmentdetails";
+         $.post('profile/async/loademploymentdetails',{_token:token},function (data){
+             if(data === -1){
+                 ajaxerrorclicktoclose();
+             }else{
+                 var animationName = 'animated fadeInUp';
+                 $('#edit-employment-details').addClass(animationName).html(data).one(animationend,function() {
+                     $(this).removeClass(animationName);
+                 });
+             }
+
+         }).fail(function (){
+             ajaxerrorclicktoclose();
+         });
+     });
 
     //CLICK Employment Details
     $('#edit-education-details-button').click(function (e){

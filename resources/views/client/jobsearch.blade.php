@@ -36,12 +36,15 @@
     {!!Form::close()!!}
     </div>
 </div>
-</section>    
-
+</section>
+{!!Form::open(array('id'=>'k'))!!}
 <div class="container">
   <div class="row mar-b20">
     <div class="col-sm-3 animated fadeInLeft">
+
         <h4 class="sm-title  mar-t10">Filter By <span id="activatefilternow" class="pull-right"></span></h4>
+
+
         <ul class="lhs-nav filter-block">
             <input type="hidden" id="searchjobsdata" value="{{URL::route('LoadSearchJobsFilterData')}}">
             <li><a href="javascript:void(0)" >Location</a></li>               
@@ -50,7 +53,8 @@
             <li ><a href="javascript:void(0)" >Industry</a></li>
              <div class="pad-l20 filter-div" id="industry-box"></div>
 
-            <li><a href="javascript:void(0)">Salary in AED</a></li>    
+            <li><a href="javascript:void(0)">Salary in AED</a></li>
+
              <div class="pad-l20 filter-div">
                   <div class="pad20">
                     <div class="filterrange"></div>
@@ -69,9 +73,12 @@
                     </label>
                   </div>                                           
               </div>       
-        </ul>            
+        </ul>
+
+        <btn class="btn-facebook"><input type="reset" id="k" value="Reset Filters" onclick=clicker();></btn>
+
     </div>
-      <div class="col-sm-offset-12">
+      <div>
           <button class="btn btn-instagram"><a href="{{ route('Home')  }}">home</a></button>
       </div>
     <div class="col-sm-9">
@@ -200,7 +207,8 @@
 </div>
 
 @stop
-
+{!!Form::token()!!}
+{!!Form::close()!!}
 @section('js')
 	@parent
   {!! Html::script('assets/js/slick.min.js') !!}
@@ -208,6 +216,11 @@
 	{!! Html::script('assets/jquery-ui-1.11.4.custom/jquery-ui-touch-punch.min.js') !!}
 	<script type="text/javascript">
   // Accordian
+  function clicker()
+  {
+      window.location="/search/jobs"
+      $('#slider').slider("value",0)
+  }
         var action="click";
         var speed="500";
          //GLOBAL REQUIREMENTS
@@ -296,7 +309,8 @@
             if($('#activatefilternow').html() === ''){
               $('#activatefilternow').html('<button id="activatefilternowbutton" title="Apply filters" class="btn btn-sm">Apply Filters</button>');
 
-              $('#activatefilternowbutton').click(function (e){
+
+                $('#activatefilternowbutton').click(function (e){
                 $('form#search_jobs_form').submit();
               });
             }
@@ -304,8 +318,10 @@
           }else{
             $('#activatefilternow').html('');
           }
-          
+
         }
+
+
 
         function reintializefilters (){
           var locations = $('#location_list').val();
@@ -320,17 +336,17 @@
           var locationArr = locations.split(';;;;');
           var industryArr = industries.split(';;;;');
           var companyArr = companies.split(';;;;');
-          
+
           $.each(locationArr, function (i,val){
-            
+
             $('[id="'+val+'_location"]').prop('checked',true);
           });
-          
+
           $.each(industryArr, function (i,val){
 
             $('[id="'+val+'_industry"]').prop('checked',true);
           });
-          
+
           $.each(companyArr, function (i,val){
 
             $('[id="'+val+'_company"]').prop('checked',true);
@@ -360,30 +376,32 @@
                  step: 500,
                  values: [setvalue1,setvalue2],
                  slide: function( event, ui ) {
-                    $( "#salary_range_start" ).val( ui.values[0] );
-                    $( "#salary_range_end" ).val( ui.values[1] );
+                     $( "#salary_range_start" ).val( ui.values[0] );
+                     $( "#salary_range_end" ).val( ui.values[1] );
                     $( "#salary_start" ).val( low );
                     $( "#salary_end" ).val( high );
                     $( "#salary_range_display" ).html("<strong>Ranges between</strong> <span class='label label-primary'>"+ui.values[0]+"</span> <i class='fa fa-caret-left'></i>&nbsp;<i class='fa fa-caret-right'></i> <span class='label label-primary'>"+ui.values[1]+"</span>");
                     redrawfilterbutton();
                  },
-                 change: function( event, ui ) {
-                    $( "#salary_range_start" ).val( ui.values[0] );
-                    $( "#salary_range_end" ).val( ui.values[1] );
-                    $( "#salary_start" ).val( low );
-                    $( "#salary_end" ).val( high );
-                    $( "#salary_range_display" ).html("<strong>Ranges between</strong> <span class='label label-primary'>"+ui.values[0]+"</span> <i class='fa fa-caret-left'></i>&nbsp;<i class='fa fa-caret-right primary'></i> <span class='label label-primary'>"+ui.values[1]+"</span>");
-                    redrawfilterbutton();
-                 }
+                  change: function( event, ui ) {
+                      $( "#salary_range_start" ).val( ui.values[0] );
+                      $( "#salary_range_end" ).val( ui.values[1] );
+                      $( "#salary_start" ).val( low );
+                      $( "#salary_end" ).val( high );
+                      $( "#salary_range_display" ).html("<strong>Ranges between</strong> <span class='label label-primary'>"+ui.values[0]+"</span> <i class='fa fa-caret-left'></i>&nbsp;<i class='fa fa-caret-right primary'></i> <span class='label label-primary'>"+ui.values[1]+"</span>");
+                      redrawfilterbutton();
+                  }
              });
 
             }
           }
-          
+
         }
 
 
-        $('#sortbyselection').on('change',function() {
+  $('#slider').slider("value",0)
+
+  $('#sortbyselection').on('change',function() {
           var form = $('form#search_jobs_form');
           var order = $(this).val();
           var input = $("<input>")
@@ -403,7 +421,7 @@
                     // Select all other answers
                     .siblings('.filter-div')
                         .slideUp();
-            $('.filter-block	 li.active').removeClass('active');                
+            $('.filter-block	 li.active').removeClass('active');
             $(this).addClass('active');
         });
 
@@ -412,7 +430,7 @@
         infinite: false,
         speed: 300,
         slidesToShow: 6,
-        slidesToScroll: 6,                    
+        slidesToScroll: 6,
         responsive: [
           {
             breakpoint: 1024,

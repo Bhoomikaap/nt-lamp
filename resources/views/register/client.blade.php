@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-
+<!--
         <div class="col-sm-4 mar-b30  pad-t20">
             <h4 class="blue-title b-title pad-b10">Subscribe to newsletter</h4>
             <div class="row hmar5 pad-t10">
@@ -26,13 +26,13 @@
                 </div>
             </div>
             <div class="mar-t30">
-                {!!Html::image('assets/img/ad1.png',null,['class'=>'img-responsive'])!!}
+              <!--  {!!Html::image('assets/img/ad1.png',null,['class'=>'img-responsive'])!!}
             </div>
             <div class="mar-t30">
-                {!!Html::image('assets/img/ad2.png',null,['class'=>'img-responsive'])!!}
+                {!!Html::image('assets/img/ad2.png',null,['class'=>'img-responsive'])!!} -->
             </div>
         </div>
-
+-->
     </div>
 </div>
 
@@ -150,6 +150,11 @@
             'The file size can not exceed 300kb.'
         );
 
+        jQuery.validator.addMethod("emailordomain", function(value, element) {
+            return this.optional(element) || /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) || /^\b[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b$/i
+                .test(value);
+        }, "Please specify the correct email");
+
 
 
         function ajaxerrorclicktoclose (){
@@ -225,6 +230,7 @@
 	                required: true,
                   minlength: 8,
 	                maxlength: 12,
+
 	               },
 
                  contact_no: {
@@ -254,7 +260,17 @@
 
                    resume:{
                        maxfilesize:true,
+                       extension: "docx|rtf|doc|pdf",
                   },
+
+                    email: {
+	                   emailordomain:true,
+
+                    },
+
+                    education_end_date:{
+                        required:true ,
+                    },
 
                     agreetoconditions:{
 	                required:true ,
@@ -309,6 +325,14 @@
 	                agreetoconditions:{
 	                    required:"<span class='glyphicon glyphicon-hand-right' style='color:red;float:right;margin-right:200%'></span>"
 	                },
+
+                    resume:{
+                        extension:"select valied input file format",
+                    },
+                    country_code:"Please enter a valid Country Code",
+                    contact_no:"Please enter a valid Conatact Number",
+                    education_end_date:"End Year value can not be prior to Start Year",
+
 	            },
 
 
@@ -327,8 +351,7 @@
 	        });
 
 
-            $('#experience_to_date').on('change',function () {
-                if ($(this).prop('checked')) {
+
                     var today = new Date();
                     var dd=today.getUTCDate()
                     var mm = today.getMonth()+1; //January is 0!
@@ -343,10 +366,8 @@
                     today = mm+'/'+dd+'/'+yyyy;
 
                     $('#experience_end_date').val(today);
-                } else {
-                    $('#experience_end_date').val('');
-                }
-            });
+
+
 
           $('#country').on('click change',function (){
             var country = $('#country').val();
@@ -395,18 +416,29 @@
             $('#password').bind("cut copy paste",function(e) {
                 e.preventDefault();
             });
+            $('#password_confirmation').bind("cut copy paste",function(e) {
+                e.preventDefault();
+            });
+
+
 
             var start = document.getElementById('education_start_date');
             var end = document.getElementById('education_end_date');
 
             start.addEventListener('change', function() {
                 if (start.value)
+
                     end.min = start.value;
+
             }, false);
             end.addEventLiseter('change', function() {
                 if (end.value)
+
                     start.max =end .value;
             }, false);
+
+
+
 
 
         }).fail(function (){

@@ -5,13 +5,13 @@
         <div class="container">
             <div class="row hmar10">
                 <div class="col-sm-2 pad-t20 hpad10">
-                    <a href="javascript:void(0)" id="employer-photo">
+                  <!--  <a href="javascript:void(0)" id="employer-photo">
                     @if (isset(Auth::user("employer")->details->profile_image) and Auth::user("employer")->details->profile_image != '')
                         {!! Html::image('uploads/profile/'.Auth::user("employer")->details->profile_image, Auth::user("employer")->name, ['class'=>'img-responsive','id'=>'profile_image']) !!}
                     @else
                         {!! Html::image('assets/img/userpic_large.png', null, ['class'=>'img-responsive','id'=>'profile_image']) !!}
                     @endif
-                    </a>
+                    </a> -->
                     {!! Form::open(array('route' => 'SaveEmployerPhoto', 'id' => 'employer-photo-form','enctype' => 'multipart/form-data')) !!}
                     <div style="visibility:hidden">
                         {!! Form::file('employerPhoto', array('id' => 'employer-photo-input')) !!}
@@ -60,7 +60,7 @@
             </div>
             <div class="col-sm-9">
                 <h3 class="m-title b-title">
-                    Applications Over Time 
+                    Applied Profiles
                     @if(count(Auth::user('employer')->jobs))
                         - <a href="{{ URL::route('EmployerViewAllApplicants') }}" class="viewall-btn">View All</a>
                     @endif
@@ -103,7 +103,7 @@
                             <th>Job</th>
                             <th class="text-center">Views</th>
                             <th class="text-center">Candidates Applied</th>
-                            <th>Match Candidates</th>
+                           <!-- <th>Match Candidates</th>-->
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -114,7 +114,7 @@
                             <td>{{ $job->title }}</td>
                             <td class="text-center">{{ count($job->applications) }}</td>
                             <td class="text-center">{{ count($job->applications) }}</td>
-                            <td>@if(count($job->applications)) <a href="#">View Applicants</a>@else No Views @endif</td>
+                          <!--  <td>@if(count($job->applications)) <a href="#">View Applicants</a>@else No Views @endif</td> -->
                             <td>
                                 <a href="{{ URL::route('ShowEmployerJobPosting') }}?edit={{ $job->id }}">Edit</a> /
                                 <a href="{{ URL::route('ShowEmployerJobPosting') }}?copy={{ $job->id }}">Copy</a> /
@@ -139,6 +139,13 @@
     @parent
     <script type="text/javascript">
         $(document).ready(function () {
+
+
+
+
+                    $('#togg').hide();
+
+
             $('#search-for-resumes').click(function (clickEvent) {
                 window.location = "{{URL::route('ResumeSearch')}}";
             });

@@ -12,7 +12,7 @@
                 {!! Form::email('email', null, ['class'=>'form-control','placeholder'=>'Enter your email','required']) !!}
             </div>
 
-            <div class="form-group ">
+            <div class="form-group">
                 <label for="">Password <span class="error-text">*</span></label>
                 {!! Form::password('password', ['id'=>'password', 'class'=>'form-control', 'placeholder'=>'Enter your password']) !!}
             </div>

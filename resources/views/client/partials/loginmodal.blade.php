@@ -70,14 +70,21 @@
                   <!--LOGIN BUTTON FOR LINKED IN-->
                   <a class="btn btn-default btn-block" style="background-color: #005983" href="{!! URL::route('ShowLinkedInLogin') !!}" title="Log in with LinkedIn"><i class="fa fa-linkedin-square" style="font-size:21px; color:#fff;"></i></a> 
                 </div>
+
             </div>
 	  </div>
           <div class="pad-t20 clearfix">
-            <div class="col-xs-12">
+            <div class="a" id="employee-signup">
               <a style="text-decoration:underline;" href="{{ URL::route('ForgotPassword') }}" class="pull-left">Forgot Password?</a><a style="text-decoration:underline;" href="{{ URL::route('Register') }}" class="pull-right">Signup</a>
             </div>
-          </div>                    
-         </div>
+          </div>
+            <div class="pad-t20 clearfix">
+            <div class="b" id="employer-signup" style="display:none">
+                <a style="text-decoration:underline;" href="{{ URL::route('ForgotPassword') }}" class="pull-left">Forgot Password?</a>  <a style="text-decoration:underline;" href="{{ URL::route('Employers') }}" class="pull-right">Signup</a>
+            </div>
+            </div>
+
+        </div>
          {!! Form::token() !!}                                      
         {!! Form::close() !!}
       </div>
